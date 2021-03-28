@@ -1,6 +1,6 @@
 # Week 02 Assignment
 
-### 
+### Post Component 구현
 https://jsonplaceholder.typicode.com/posts/ 에서 가져온 데이터로 Post 컴포넌트 구현
 
 ### 프론트엔드
