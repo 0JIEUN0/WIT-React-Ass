@@ -1,0 +1,21 @@
+.App-post {
+  position: relative;
+  background: #E5E5E5;
+  text-align: left;
+  width: 720px;
+  left: auto;
+  top: 20px;
+  background: #FFFFFF;
+  opacity: 0.6;
+  box-shadow: 3px 3px 30px 10px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+
+.App {
+  text-align: center;
+  background: #E5E5E5;
+}
+ 
