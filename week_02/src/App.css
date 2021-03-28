@@ -13,6 +13,14 @@
   padding: 20px;
 }
 
+.Box {
+  display: flex;
+}
+
+.Theme {
+  font-weight: bold;
+  margin-right: 10px;
+}
 
 .App {
   text-align: center;
