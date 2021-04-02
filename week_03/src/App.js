@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 
 function Post(props) {
@@ -21,7 +21,7 @@ function Post(props) {
         getComments();
       }, 2000);
     
-  }, [])
+  }, [props.PostInfo.post.id])
 
   return (
       <div className="App-post">
@@ -43,7 +43,7 @@ function Post(props) {
           { 
           isReady?
           comments.map(
-            comment => <Comment CommentInfo={comment}></Comment>)
+            comment => <Comment key={comment.id} CommentInfo={comment}></Comment>)
             : "Loding..."
           }
         </div>
@@ -67,6 +67,7 @@ function App(props) {
   const [posts, setPosts] = useState([]);
   const [isReady, setIsReady] = useState(false)
 
+  const postId = useRef(0)
   
   useEffect(() => {
     const getPosts = () => {
@@ -76,8 +77,9 @@ function App(props) {
           const tmpUrl = 'https://jsonplaceholder.typicode.com/posts/'+input.id+'/comments';
           setPosts((posts) => [...posts,
             {post: input, commentUrl: tmpUrl}])
+            postId.current = input.id;
           }
-       ));
+       ))
        setIsReady(true);
       }
     setTimeout(() => {
@@ -85,13 +87,51 @@ function App(props) {
     }, 2000);
   }, [])
    
+  const [postUser, setPostUser] = useState("");
+  const [postTitle, setPostTitle] = useState("");
+  const [postBody, setPostBody] = useState("");
+  const addPost = () => {
+    postId.current += 1;
+    if ( postUser && postTitle && postBody){
+      const newPost = {
+        id: postId.current, 
+        userId: postUser, 
+        title: postTitle,
+        body: postBody
+      };
+      setPosts((posts) => [{post: newPost, commentUrl: ""}, ...posts]);
+      setPostUser("");
+      setPostTitle("");
+      setPostBody("");
+      console.log( posts);
+    } else {alert("You must fill all of (User, Title, Body)")}
+  }
+
   return (
     <div className="App">
       <h1>Hello! Simple Blog of WIT Week-03 study 😊</h1>
+      <div className="WritePost">
+        <p><textarea className="WritePostUser" 
+          type="text" placeholder="User" 
+          value={postUser} onChange={(e) => {setPostUser(e.target.value)}} >
+        </textarea>
+        
+        <textarea className="WritePostTitle" 
+              type="text" placeholder="Title"
+              value={postTitle} onChange={(e) => {setPostTitle(e.target.value)}}>
+          </textarea>
+        </p>
+        <p><textarea className="WritePostBody" 
+              type="text" placeholder="Body"
+              value={postBody} onChange={(e) => {setPostBody(e.target.value)}}>
+            </textarea>
+        </p>
+        <button onClick={addPost}>+</button>
+      </div>
       <div>
         {
           isReady ?  
-          posts.map(post => <Post PostInfo={post}></Post>)
+          posts.map(post => <Post key={post.post.id} PostInfo={post}></Post>)
           : "Loding..."
         }
       </div>
