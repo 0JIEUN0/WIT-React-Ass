@@ -1,4 +1,4 @@
-# Week 02 Assignment
+# Week 03 Assignment
 
 ### Post 추가
 2주차 과제에 tetarea, button 태그를 활용하여 post 추가하기<br>
