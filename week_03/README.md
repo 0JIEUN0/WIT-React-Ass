@@ -9,4 +9,5 @@
 - Post 기능 추가<br>
 - 결과<br>
 ![image](https://user-images.githubusercontent.com/63097207/113503521-71e8fb00-956d-11eb-9423-7b2f53776ad9.png)
+- Server<br>
 ![image](https://user-images.githubusercontent.com/63097207/113503532-7c0af980-956d-11eb-9f62-356c7ad8feab.png)
