@@ -27,7 +27,7 @@ function Post(props) {
       <div className="App-post">
         <div className="Box">
           <div className="Theme">User</div>
-          <div>{props.PostInfo.post.userId}</div>
+          <div>{props.PostInfo.post.userName}</div>
         </div>
         <div className="Box">
           <div className="Theme">Title</div>
@@ -36,7 +36,7 @@ function Post(props) {
         <hr />
         <div className="Box">
           <div className="Theme">Body</div>
-          <div>{props.PostInfo.post.body}</div>
+          <div>{props.PostInfo.post.content}</div>
         </div>
         <hr />
         <div>
@@ -67,19 +67,22 @@ function App(props) {
   const [posts, setPosts] = useState([]);
   const [isReady, setIsReady] = useState(false)
 
-  const postId = useRef(0)
+  const postId = useRef(106)
   
   useEffect(() => {
     const getPosts = () => {
-      fetch("https://jsonplaceholder.typicode.com/posts/")
+      fetch("http://localhost:8080/api/v1/posts")
        .then(response => response.json())
-       .then(inputJson => inputJson.map(input=> {
+       .then(inputJson => {
+         inputJson.map(input=> {
           const tmpUrl = 'https://jsonplaceholder.typicode.com/posts/'+input.id+'/comments';
           setPosts((posts) => [...posts,
             {post: input, commentUrl: tmpUrl}])
-            postId.current = input.id;
-          }
-       ))
+          })
+          postId.current = Math.max.apply(null, inputJson.map(input => input.id))
+          //console.log(postId.current)
+        }
+       )
        setIsReady(true);
       }
     setTimeout(() => {
@@ -90,20 +93,36 @@ function App(props) {
   const [postUser, setPostUser] = useState("");
   const [postTitle, setPostTitle] = useState("");
   const [postBody, setPostBody] = useState("");
+
   const addPost = () => {
-    postId.current += 1;
     if ( postUser && postTitle && postBody){
+      postId.current += 1;
       const newPost = {
         id: postId.current, 
-        userId: postUser, 
+        userName: postUser, 
         title: postTitle,
-        body: postBody
-      };
+        content: postBody,
+      };      
+      
       setPosts((posts) => [{post: newPost, commentUrl: ""}, ...posts]);
+      fetch("http://localhost:8080/api/v1/posts", {
+        method: 'POST',
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }) ,
+        body: JSON.stringify({
+          userName: postUser, 
+          title: postTitle,
+          content: postBody,
+          time: new Date()
+        })
+      })
+      
       setPostUser("");
       setPostTitle("");
       setPostBody("");
-      console.log( posts);
+
+      console.log(newPost.id)
     } else {alert("You must fill all of (User, Title, Body)")}
   }
 
